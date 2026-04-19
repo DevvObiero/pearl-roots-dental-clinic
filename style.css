@@ -340,6 +340,15 @@ img {
     overflow-x: hidden;
   }
 
+ .hero-image {
+    align-items: flex-start;   /* 👈 stop vertical centering */
+    padding-top: 40px;         /* 👈 controls gap from nav */
+  }
+
+  .wrapper-img {
+    height: auto;              /* 👈 stop forcing full screen */
+  }
+
   .header .title {
     font-size: 20vw;
     top: 44%;

@@ -425,10 +425,10 @@ img {
     display: none; /* hide "contact" text */
   }
 
-  /* .menu-center {
+  .menu-center {
     flex: 1;
     text-align: center;
-  } */
+  }
 
   .menu-center {
     display: none; /* hide big center text on mobile */

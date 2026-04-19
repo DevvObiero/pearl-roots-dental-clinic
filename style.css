@@ -264,7 +264,7 @@ img {
   left: 50%;
   transform: translate(-50%, -50%);
   color: #A4DDED;
-  font-family: "Times New Roman", serif;
+  font-family: "Times New Roman";
   font-size: 300px;
   line-height: 1;
   white-space: nowrap;

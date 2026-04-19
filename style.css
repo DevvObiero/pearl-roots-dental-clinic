@@ -264,7 +264,7 @@ img {
   left: 50%;
   transform: translate(-50%, -50%);
   color: #A4DDED;
-  font-family: "Voyage";
+  font-family: "Times New Roman", serif;
   font-size: 300px;
   line-height: 1;
   white-space: nowrap;
@@ -340,15 +340,18 @@ img {
     overflow-x: hidden;
   }
 
- .hero-image {
-    align-items: flex-start;   /* 👈 stop vertical centering */
-    padding-top: 50px;         /* 👈 controls gap from nav */
+ /* .hero-image {
+    align-items: flex-start;  
+    padding-top: 50px;         
   }
 
   .wrapper-img {
-    height: auto;              /* 👈 stop forcing full screen */
+    height: auto;             
+  } */
+  .hero-image {
+    align-items: flex-start;
+    padding-top: 20px;   /* try 20, 30, 40 until it feels right */
   }
-
   .header .title {
     font-size: 20vw;
     top: 44%;

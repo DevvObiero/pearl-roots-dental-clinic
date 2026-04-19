@@ -64,9 +64,9 @@ TweenMax.staggerFrom(
     opacity: 0,
     y: 30,
     ease: Expo.easeInOut,
-    delay: 4.2,
+    delay: 6.2,
   },
-  0.1
+  0.5
 );
 
 /* SCROLL REVEAL */
@@ -76,6 +76,14 @@ const io = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
       entry.target.classList.add('visible');
+
+      // 👇 trigger stats animation only once
+      if (entry.target.classList.contains('about-stat-row')) {
+        entry.target.querySelectorAll('.stat-number').forEach((el) => {
+          animateStats(el);
+        });
+      }
+
       io.unobserve(entry.target);
     }
   });
@@ -198,3 +206,27 @@ if (burger && mobileMenu) {
     });
   });
 }
+const statNumbers = document.querySelectorAll('.stat-number');
+
+const animateStats = (el) => {
+  const target = +el.getAttribute('data-target');
+  const suffix = el.getAttribute('data-suffix') || '';
+  const prefix = el.getAttribute('data-prefix') || '';
+
+  let current = 0;
+  const duration = 1200;
+  const increment = target / (duration / 16);
+
+  const update = () => {
+    current += increment;
+
+    if (current < target) {
+      el.textContent = prefix + Math.floor(current) + suffix;
+      requestAnimationFrame(update);
+    } else {
+      el.textContent = prefix + target + suffix;
+    }
+  };
+
+  update();
+};

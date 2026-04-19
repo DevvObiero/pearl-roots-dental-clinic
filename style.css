@@ -17,7 +17,7 @@ body {
   width: 100%;
   min-height: 100%;
   background: #EDF7FF;
-  overflow-x: hidden;
+  overflow-x: hidden !important;
 }
 
 nav {
@@ -186,7 +186,13 @@ img {
   min-height: 100%;
   overflow-x: hidden;
 }
-
+ @media (max-width: 768px) {
+  .header .title {
+    font-size: 18vw;
+    top: 44%;
+    white-space: nowrap;
+  }
+}
   nav {
     height: 70px;
   }

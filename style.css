@@ -42,7 +42,10 @@ nav {
   position: relative;
   z-index: 1000;
 }
-
+  .nav-logo {
+    width: 60px;
+    height: 60px;
+  }
 .menu-item {
   flex: 1;
 }
@@ -59,12 +62,12 @@ nav {
   text-align: center;
 }
  
-.nav-logo {
+/* .nav-logo {
   width: 38px;
   height: 38px;
   object-fit: contain;
   display: block;
-}
+} */
 .menu-right {
   text-align: right;
   margin-right: 4em;
@@ -452,10 +455,7 @@ img {
     display: flex;
   }
 
-  .nav-logo {
-    width: 32px;
-    height: 32px;
-  }
+
 .site-content {
   position: relative;
   z-index: 5;

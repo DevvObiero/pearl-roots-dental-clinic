@@ -182,6 +182,9 @@ img {
   right: 0.4em;
   transform: translate(-50%, -50%);
 }
+.whatsapp-btn img {
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.2));
+}
 .whatsapp-btn {
   position: fixed;
   bottom: 30px;

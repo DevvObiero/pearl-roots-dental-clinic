@@ -350,7 +350,7 @@ img {
   } */
   .hero-image {
     align-items: flex-start;
-    padding-top: 20px;   /* try 20, 30, 40 until it feels right */
+    padding-top: 100px;   /* try 20, 30, 40 until it feels right */
   }
   .header .title {
     font-size: 20vw;

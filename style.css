@@ -216,7 +216,9 @@ img {
   pointer-events: auto;
   transition: all 0.4s ease;
 }
-
+.whatsapp-btn {
+  transition: all 0.3s ease;
+}
 /* hover effect */
 .whatsapp-btn:hover {
   width: 55px;

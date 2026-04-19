@@ -181,4 +181,4 @@ if (quoteEl && authorEl && dotsWrap) {
 
 setTimeout(() => {
   whatsappBtn.classList.add("show");
-}, 3000);
+}, 5500);

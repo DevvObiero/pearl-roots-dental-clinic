@@ -341,7 +341,7 @@ img {
   }
 
   .header .title {
-    font-size: 18vw;
+    font-size: 20vw;
     top: 44%;
     white-space: nowrap;
   }
@@ -444,7 +444,7 @@ img {
     text-align: center;
   }
 
-  s
+  
   .menu-right {
     margin-right: 1.2em;
     display: flex;
@@ -473,7 +473,7 @@ img {
   opacity: 0;
   transform: translateY(60px);
   transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1),
-              transform 0.9s cubic-bezier(0.16,1,0.3,1);
+  transform 0.9s cubic-bezier(0.16,1,0.3,1);
 }
 
 .reveal.visible {

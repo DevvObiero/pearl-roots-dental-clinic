@@ -1,3 +1,12 @@
+@font-face {
+  font-family: 'Monument Extended';
+  src: url('../fonts/MonumentExtended-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+
 *{
 margin:0;
 padding:0;
@@ -18,4 +27,7 @@ nav{
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
+    align-items: center;
+    text-transform: uppercase;
+    font-family: "Monument Extended";
 }

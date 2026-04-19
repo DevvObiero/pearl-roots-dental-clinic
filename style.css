@@ -158,6 +158,9 @@ img {
   color: #A4DDED;
   font-family: "Voyage";
   font-size: 300px;
+  line-height: 1;
+  white-space: nowrap;
+  z-index: 2;
 }
 
 .title .letter {

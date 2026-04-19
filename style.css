@@ -182,4 +182,74 @@ p {
 	font-family: "Monument Extended";
 
     }
-    
+    /* ===== MOBILE STYLES ===== */
+@media (max-width: 768px) {
+
+  html, body {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  nav {
+    height: 70px;
+  }
+
+  .menu-left {
+    margin-left: 1.2em;
+  }
+
+  .menu-right {
+    margin-right: 1.2em;
+  }
+
+  .menu-link {
+    padding: 0 10px;
+    font-size: 0.55em;
+  }
+
+  .brand-logo {
+    font-size: 0.65em;
+  }
+
+  /* Center image wrapper — smaller on mobile */
+  .wrapper-img {
+    width: 55vw;
+    height: 65vw;
+    max-width: 220px;
+    max-height: 290px;
+  }
+
+  /* Side images — smaller on mobile, same stacking logic */
+  .img {
+    width: 160px;
+    height: 210px;
+    top: 42%;
+  }
+
+  p {
+    font-size: 18vw;
+    top: 44%;
+  }
+
+  .sidebar-text {
+    font-size: 22px;
+    top: 15%;
+  }
+
+  .projects {
+    font-size: 0.6em;
+    left: 12%;
+    bottom: 8%;
+  }
+
+  .img-nav {
+    font-size: 0.6em;
+    right: 8%;
+    bottom: 10%;
+  }
+
+  .next {
+    top: 30px;
+    left: 55px;
+  }
+}

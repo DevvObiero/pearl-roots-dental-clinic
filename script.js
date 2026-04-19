@@ -13,6 +13,7 @@ anime.timeline().add({
   duration: 2000,
   delay: (el, i) => 4800 + 40 * i,
 });
+
 TweenMax.to(".box", 2.4, {
   y: "-100%",
   ease: Expo.easeInOut,
@@ -25,9 +26,12 @@ TweenMax.from("img", 4, {
   delay: 0,
 });
 
+// Detect mobile
+var isMobile = window.innerWidth <= 768;
+
 TweenMax.to(".wrapper-img", 2.4, {
-  width: "400",
-  height: "500",
+  width: isMobile ? "160" : "400",
+  height: isMobile ? "210" : "500",
   ease: Expo.easeInOut,
   delay: 3.6,
 });
@@ -38,15 +42,16 @@ TweenMax.from(".img", 0.4, {
   delay: 3.4,
 });
 
+// Mobile: smaller spread; Desktop: original values
 TweenMax.to(".left", 2, {
-  x: "-400",
+  x: isMobile ? "-200" : "-400",
   rotation: -10,
   ease: Expo.easeInOut,
   delay: 3.8,
 });
 
 TweenMax.to(".right", 2, {
-  x: "100",
+  x: isMobile ? "50" : "100",
   rotation: 10,
   ease: Expo.easeInOut,
   delay: 3.8,

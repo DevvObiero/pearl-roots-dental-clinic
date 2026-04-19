@@ -257,7 +257,10 @@ img {
   white-space: nowrap;
   z-index: 2;
 }
-
+.service-arrow ion-icon {
+  font-size: 14px;
+  display: block;
+}
 .title .letter {
   display: inline-block;
   line-height: 1em;

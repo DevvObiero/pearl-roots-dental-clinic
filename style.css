@@ -12,7 +12,14 @@
   box-sizing: border-box;
   
 }
-
+.container,
+.images,
+.hero-image,
+.header,
+.hero-container,
+.wrapper-img {
+  overflow-x: clip;
+}
 html,
 body {
   width: 100%;
@@ -433,7 +440,7 @@ img {
     text-align: center;
   }
 
-  
+  s
   .menu-right {
     margin-right: 1.2em;
     display: flex;

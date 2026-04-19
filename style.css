@@ -342,7 +342,7 @@ img {
 
  .hero-image {
     align-items: flex-start;   /* 👈 stop vertical centering */
-    padding-top: 40px;         /* 👈 controls gap from nav */
+    padding-top: 50px;         /* 👈 controls gap from nav */
   }
 
   .wrapper-img {

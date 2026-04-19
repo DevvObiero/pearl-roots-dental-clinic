@@ -433,10 +433,7 @@ img {
     text-align: center;
   }
 
-  .menu-center {
-    display: none; /* hide big center text on mobile */
-  }
-
+  
   .menu-right {
     margin-right: 1.2em;
     display: flex;

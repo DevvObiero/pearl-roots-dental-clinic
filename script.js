@@ -101,29 +101,28 @@ document.querySelectorAll('[data-ba]').forEach((wrap) => {
 
   setClip(50);
 
-  handle.addEventListener('mousedown', () => {
+  const startDrag = (e) => {
     dragging = true;
-  });
+    setClip(getPos(e));
+  };
 
-  handle.addEventListener('touchstart', () => {
-    dragging = true;
-  }, { passive: true });
+  const moveDrag = (e) => {
+    if (!dragging) return;
+    setClip(getPos(e));
+  };
 
-  window.addEventListener('mouseup', () => {
+  const stopDrag = () => {
     dragging = false;
-  });
+  };
 
-  window.addEventListener('touchend', () => {
-    dragging = false;
-  });
+  handle.addEventListener('mousedown', startDrag);
+  handle.addEventListener('touchstart', startDrag, { passive: true });
 
-  window.addEventListener('mousemove', (e) => {
-    if (dragging) setClip(getPos(e));
-  });
+  wrap.addEventListener('mousemove', moveDrag);
+  wrap.addEventListener('touchmove', moveDrag, { passive: true });
 
-  window.addEventListener('touchmove', (e) => {
-    if (dragging) setClip(e);
-  }, { passive: true });
+  window.addEventListener('mouseup', stopDrag);
+  window.addEventListener('touchend', stopDrag);
 });
 
 /* TESTIMONIALS */

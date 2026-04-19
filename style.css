@@ -858,7 +858,7 @@ footer {
 .footer-map {
   width: 100%;
   min-height: 220px;
-  overflow: hidden;
+  overflow: hidden; 
   border: 1px solid rgba(245,245,242,0.15);
 }
 

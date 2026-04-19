@@ -302,11 +302,9 @@ img {
   width: 50px;
   height: 50px;
   z-index: 999;
-
   opacity: 0;
   transform: translateY(20px) scale(0.9);
   pointer-events: none;
-
   cursor: pointer; /* 👈 fix pointer */
 }
 
@@ -624,11 +622,10 @@ section {
 
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 1px;
   background: rgba(245,245,242,0.12);
 }
-
 .service-card {
   background: var(--ink);
   padding: clamp(28px, 3vw, 48px);
@@ -1116,13 +1113,19 @@ footer {
   text-transform: uppercase;
   color: rgba(245,245,242,0.25);
 }
-
+@media (max-width: 1024px) {
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 /* MOBILE */
 @media (max-width: 768px) {
   .site-content {
     margin-top: 100vh;
   }
-
+.services-grid {
+  grid-template-columns: 1fr;
+}
   #about,
   #book,
   .process-header,

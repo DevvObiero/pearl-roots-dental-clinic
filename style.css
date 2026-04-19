@@ -10,7 +10,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  overflow-x: hidden !important;
+  
 }
 
 html,
@@ -261,7 +261,7 @@ img {
 
 :root {
   --sand: #bbb8be;
-  --cream: #cfeded;
+  --cream: #EDF7FF;
   --ink: #1a1a1a;
   --stroke: rgb(117,113,113);
   --white: #ffffff;
@@ -291,6 +291,8 @@ section {
   padding: var(--gap) clamp(24px, 6vw, 100px);
   position: relative;
   overflow: hidden;
+  overflow-x: hidden !important;
+
 }
 
 .section-label {

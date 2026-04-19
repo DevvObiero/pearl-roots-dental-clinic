@@ -865,9 +865,11 @@ footer {
 .footer-map iframe {
   width: 100%;
   height: 220px;
-  display: block;
+  border: none;
   filter: grayscale(100%) contrast(1.05);
 }
+
+
 .footer-brand {
   font-size: clamp(20px, 2.5vw, 36px);
   color: var(--white);

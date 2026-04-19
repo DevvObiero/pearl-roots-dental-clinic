@@ -182,7 +182,29 @@ img {
   right: 0.4em;
   transform: translate(-50%, -50%);
 }
+.whatsapp-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 55px;
+  height: 55px;
+  z-index: 999;
 
+  opacity: 0;
+  transform: scale(0.7);
+  pointer-events: none;
+}
+
+.whatsapp-btn {
+  opacity: 0;
+  transform: translateY(20px) scale(0.8);
+}
+
+.whatsapp-btn.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
 /* ===== MOBILE STYLES ===== */
 @media (max-width: 768px) {
 
@@ -205,6 +227,13 @@ img {
     margin-left: 1.2em;
   }
 
+  .whatsapp-btn {
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+  
+}
   .menu-right {
     margin-right: 1.2em;
   }

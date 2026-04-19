@@ -177,4 +177,8 @@ if (quoteEl && authorEl && dotsWrap) {
   setInterval(() => {
     showTesti((current + 1) % testimonials.length);
   }, 5000);
-}
+}const whatsappBtn = document.querySelector(".whatsapp-btn");
+
+setTimeout(() => {
+  whatsappBtn.classList.add("show");
+}, 3000);

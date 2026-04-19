@@ -139,12 +139,12 @@ img {
 }
 
 .left {
-  background: url("../images/2.jpg") no-repeat 50% 50%;
+  background: url("../images/3.jpeg") no-repeat 50% 50%;
   background-size: cover;
 }
 
 .right {
-  background: url("../images/3.jpg") no-repeat 50% 50%;
+  background: url("../images/2.jpeg") no-repeat 50% 50%;
   background-size: cover;
 }
 

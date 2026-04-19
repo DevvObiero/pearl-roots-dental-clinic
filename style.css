@@ -180,7 +180,56 @@ img {
   background: url("../images/2.jpeg") no-repeat 50% 50%;
   background-size: cover;
 }
+.mobile-menu {
+  position: fixed;
+  top: 70px;
+  right: 0;
+  width: 100%;
+  height: calc(100vh - 70px);
+  background: #EDF7FF;
 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+
+  transition: all 0.4s ease;
+  z-index: 999;
+}
+.burger-icon.active span:nth-child(1) {
+  transform: rotate(45deg) translate(4px, 4px);
+}
+
+.burger-icon.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.burger-icon.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(4px, -4px);
+}
+
+.burger-icon span {
+  transition: all 0.3s ease;
+}
+.mobile-menu a {
+  font-family: "Monument Extended";
+  font-size: 18px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #000;
+}
+
+/* when active */
+.mobile-menu.show {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
 .header .title {
   width: 100%;
   text-align: center;
@@ -355,7 +404,12 @@ img {
   margin-top: 100vh;
   background: var(--sand);
 }
-
+@media (max-width: 768px) {
+  .menu-left,
+  .menu-right a.menu-link {
+    display: none;
+  }
+}
 .reveal {
   opacity: 0;
   transform: translateY(60px);

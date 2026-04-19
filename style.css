@@ -32,6 +32,8 @@ nav {
   align-items: center;
   text-transform: uppercase;
   font-family: "Monument Extended";
+  position: relative;
+  z-index: 1000;
 }
 
 .menu-item {
@@ -52,10 +54,40 @@ nav {
   margin-right: 4em;
 }
 
+
 .menu-link {
   padding: 0 30px;
 }
 
+.menu-link.nav-link {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+  color: #000;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.menu-link.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 30px;
+  right: 30px;
+  bottom: -8px;
+  height: 2px;
+  background: #4da6ff;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.menu-link.nav-link:hover {
+  color: #10b7b7;
+}
+
+.menu-link.nav-link:hover::after {
+  transform: scaleX(1);
+}
 /* Search icon (desktop) */
 .desktop-only {
   display: block;
@@ -227,18 +259,17 @@ img {
 }
 /* ===== MOBILE STYLES ===== */
 @media (max-width: 768px) {
-
   html, body {
-  min-height: 100%;
-  overflow-x: hidden;
-}
- @media (max-width: 768px) {
+    min-height: 100%;
+    overflow-x: hidden;
+  }
+
   .header .title {
     font-size: 18vw;
     top: 44%;
     white-space: nowrap;
   }
-}
+
   nav {
     height: 70px;
   }
@@ -252,8 +283,8 @@ img {
     right: 20px;
     width: 50px;
     height: 50px;
-  
-}
+  }
+
   .menu-right {
     margin-right: 1.2em;
   }
@@ -263,11 +294,16 @@ img {
     font-size: 0.55em;
   }
 
+  .menu-link.nav-link::after {
+    left: 10px;
+    right: 10px;
+    bottom: -5px;
+  }
+
   .brand-logo {
     font-size: 0.65em;
   }
 
-  /* Swap search for burger */
   .desktop-only {
     display: none;
   }
@@ -277,7 +313,6 @@ img {
     justify-content: flex-end;
   }
 
-  /* Center image wrapper — smaller on mobile */
   .wrapper-img {
     width: 55vw;
     height: 65vw;
@@ -285,19 +320,12 @@ img {
     max-height: 290px;
   }
 
-  /* Side images — smaller on mobile */
   .img {
     width: 160px;
     height: 210px;
     top: 42%;
   }
 
-  p {
-    font-size: 18vw;
-    top: 44%;
-  }
-
-  /* 003 — centered on mobile */
   .sidebar-text {
     font-size: 22px;
     top: auto;
@@ -316,7 +344,11 @@ img {
   --white: #ffffff;
   --gap: clamp(60px, 8vw, 120px);
 }
-
+.menu-link.nav-link::after {
+  left: 10px;
+  right: 10px;
+  bottom: -5px;
+}
 .site-content {
   position: relative;
   z-index: 5;

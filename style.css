@@ -430,6 +430,122 @@ img {
   height: 55px;
   transform: translateY(0) scale(1.05);
 }
+#faq {
+  background: var(--sand);
+}
+
+.faq-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  margin-bottom: clamp(36px, 5vw, 68px);
+}
+
+.faq-title {
+  font-size: clamp(32px, 4.8vw, 76px);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.faq-note {
+  position: static;
+  transform: none;
+  width: auto;
+  max-width: 260px;
+  text-align: right;
+  font-family: Georgia, serif;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--stroke);
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid rgba(117,113,113,0.25);
+}
+
+.faq-item {
+  border-bottom: 1px solid rgba(117,113,113,0.25);
+}
+
+.faq-question {
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 24px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  cursor: pointer;
+  text-align: left;
+  color: var(--ink);
+  font-family: "Monument Extended", sans-serif;
+  font-size: clamp(11px, 1vw, 14px);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.faq-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, padding-bottom 0.35s ease;
+  padding-bottom: 0;
+}
+
+.faq-answer p {
+  position: static;
+  transform: none;
+  width: auto;
+  text-align: left;
+  font-family: Georgia, serif;
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--ink);
+  opacity: 0.78;
+  max-width: 760px;
+}
+
+.faq-item.active .faq-answer {
+  max-height: 220px;
+  padding-bottom: 22px;
+}
+
+.faq-item.active .faq-icon {
+  transform: rotate(45deg);
+}
+
+@media (max-width: 768px) {
+  .faq-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .faq-note {
+    text-align: left;
+    max-width: 100%;
+  }
+
+  .faq-question {
+    padding: 20px 0;
+    font-size: 11px;
+    line-height: 1.6;
+  }
+
+  .faq-answer p {
+    font-size: 14px;
+  }
+}
 /* ===== MOBILE STYLES ===== */
 @media (max-width: 768px) {
   html, body {

@@ -64,9 +64,9 @@ TweenMax.staggerFrom(
     opacity: 0,
     y: 30,
     ease: Expo.easeInOut,
-    delay: 6.2,
+    delay: 4.2,
   },
-  0.5
+  0.2
 );
 
 /* SCROLL REVEAL */

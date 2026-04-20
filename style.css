@@ -363,6 +363,56 @@ img {
 
   pointer-events: none; /* 👈 makes parent handle hover */
 }
+#kids-friendly {
+  background: var(--cream);
+}
+
+.kids-friendly-inner {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: clamp(28px, 5vw, 72px);
+  align-items: center;
+}
+
+.kids-friendly-image {
+  width: 100%;
+  height: 520px;
+  overflow: hidden;
+  background: #d9d9d9;
+}
+
+.kids-friendly-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.kids-friendly-content {
+  max-width: 520px;
+}
+
+.kids-friendly-title {
+  font-size: clamp(34px, 5vw, 78px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin-bottom: 22px;
+  color: var(--ink);
+}
+
+.kids-friendly-text {
+  position: static;
+  transform: none;
+  width: auto;
+  text-align: left;
+  font-family: Georgia, serif;
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--ink);
+  opacity: 0.75;
+}
+
 
 /* visible state */
 .whatsapp-btn.show {
@@ -386,7 +436,18 @@ img {
     min-height: 100%;
     overflow-x: hidden;
   }
+  .kids-friendly-inner {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
 
+  .kids-friendly-image {
+    height: 320px;
+  }
+
+  .kids-friendly-title {
+    font-size: clamp(28px, 11vw, 52px);
+  }
  /* .hero-image {
     align-items: flex-start;  
     padding-top: 50px;         

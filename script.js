@@ -230,3 +230,14 @@ const animateStats = (el) => {
 
   update();
 };
+
+const baMoreToggle = document.querySelector(".ba-more-toggle");
+const baMore = document.querySelector(".ba-more");
+
+if (baMoreToggle && baMore) {
+  baMoreToggle.addEventListener("click", () => {
+    const isOpen = baMore.classList.toggle("show");
+    baMoreToggle.textContent = isOpen ? "Show Less" : "Show More";
+    baMoreToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  });
+}

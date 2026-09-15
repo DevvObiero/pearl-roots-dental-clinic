@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <!-- Homepage -->
   <url>
     <loc>https://pearlrootsdentalclinic.com/</loc>
     <lastmod>2026-05-04</lastmod>
     <priority>1.00</priority>
   </url>
+
+  <!-- Teeth Whitening Blog -->
+  <url>
+    <loc>https://pearlrootsdentalclinic.com/teeth-whitening.html</loc>
+    <lastmod>2026-09-16</lastmod>
+    <priority>0.80</priority>
+  </url>
+
 </urlset>

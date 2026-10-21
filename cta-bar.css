@@ -1,0 +1,78 @@
+/* Sticky mobile booking bar, shared by index.html, teeth-whitening.html and the generated blog pages.
+   Hidden on desktop; on phones it replaces the floating WhatsApp bubble. */
+
+.cta-bar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --cta-bar-h: 72px;
+  }
+
+  .cta-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 990; /* below .mobile-menu (999) so the open menu covers it */
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 8px;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    background: rgba(237, 247, 255, 0.96);
+    border-top: 1px solid rgba(26, 26, 26, 0.12);
+    box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.08);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+
+  .cta-bar a {
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-align: center;
+    text-decoration: none;
+    font-family: "Monument Extended", sans-serif;
+    font-size: 10px;
+    line-height: 1.35;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .cta-bar a:active {
+    transform: scale(0.98);
+  }
+
+  /* Primary action: ink on cream is the highest-contrast pairing in the palette */
+  .cta-bar-book {
+    background: #1a1a1a;
+    color: #ffffff;
+  }
+
+  /* WhatsApp green with dark text (white on #25D366 fails WCAG contrast) */
+  .cta-bar-wa {
+    background: #25D366;
+    color: #0b2e17;
+  }
+
+  .cta-bar-wa svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  /* Keep the footer reachable above the bar, and drop the now-redundant floating bubble */
+  body {
+    padding-bottom: calc(var(--cta-bar-h) + env(safe-area-inset-bottom));
+  }
+
+  .whatsapp-btn {
+    display: none !important;
+  }
+}

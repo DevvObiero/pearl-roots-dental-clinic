@@ -1463,3 +1463,127 @@ footer {
     gap: 0.6em;
   }
 }
+
+/* ===== HERO TRUST STATS (above the fold) =====
+   Sits outside .hero-container so it is NOT part of the 4s+ intro animation:
+   trust signals are visible from first paint. */
+.hero-trust {
+  position: absolute;
+  left: 50%;
+  top: calc(100vh - 150px);
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  animation: hero-trust-in 0.6s ease 0.2s both;
+}
+
+.hero-stats {
+  list-style: none;
+  display: flex;
+  background: rgba(237, 247, 255, 0.92);
+  border: 1px solid rgba(26, 26, 26, 0.12);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.hero-stats li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 28px;
+  text-align: center;
+}
+
+.hero-stats li + li {
+  border-left: 1px solid rgba(117, 113, 113, 0.3);
+}
+
+.hero-stats strong {
+  font-family: "Monument Extended";
+  font-weight: normal;
+  font-size: 22px;
+  line-height: 1;
+  color: #1a1a1a;
+}
+
+.hero-stats span {
+  font-family: "Monument Extended";
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #4a4747;
+}
+
+.hero-call {
+  font-family: "Monument Extended";
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: #4da6ff;
+  background: rgba(237, 247, 255, 0.85);
+  padding: 4px 8px;
+}
+
+@keyframes hero-trust-in {
+  from { opacity: 0; transform: translate(-50%, 12px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-trust { animation: none; }
+}
+
+@media (max-width: 768px) {
+  /* Anchor to the small viewport so the stats sit just above the sticky booking bar
+     even when mobile browser toolbars are showing */
+  .hero-trust {
+    top: calc(100vh - var(--cta-bar-h, 72px) - 116px);
+    top: calc(100svh - var(--cta-bar-h, 72px) - 116px);
+    width: calc(100vw - 32px);
+  }
+
+  .hero-stats {
+    width: 100%;
+  }
+
+  .hero-stats li {
+    flex: 1;
+    padding: 10px 4px;
+  }
+
+  .hero-stats strong {
+    font-size: 16px;
+  }
+
+  .hero-stats span {
+    font-size: 7.5px;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+  }
+
+  .hero-call {
+    font-size: 9px;
+  }
+
+  /* Lift the decorative "254" above the trust stats so the two don't collide */
+  .sidebar-text {
+    bottom: auto;
+    top: calc(100vh - var(--cta-bar-h, 72px) - 160px);
+    top: calc(100svh - var(--cta-bar-h, 72px) - 160px);
+  }
+}
+
+@media (max-width: 400px) {
+  .hero-call-prefix {
+    display: none;
+  }
+}

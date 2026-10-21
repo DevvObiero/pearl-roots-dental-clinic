@@ -1,0 +1,656 @@
+/* Styles for the generated blog pages (/blog/ and /blog/<slug>/).
+   Mirrors the look of teeth-whitening.html. Markup comes from scripts/build-blog.mjs. */
+
+@font-face {
+  font-family: 'Monument Extended';
+  src: url('/fonts/MonumentExtended-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --sand: #bbb8be;
+  --cream: #EDF7FF;
+  --ink: #1a1a1a;
+  --stroke: rgb(117, 113, 113);
+  --white: #ffffff;
+  --accent-cyan: #10b7b7;
+  --accent-blue: #4da6ff;
+  --gap: clamp(60px, 8vw, 120px);
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  background: var(--cream);
+  overflow-x: hidden;
+}
+
+body {
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--ink);
+}
+
+a {
+  color: inherit;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ===== NAVIGATION ===== */
+nav.menu {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+  font-family: "Monument Extended", sans-serif;
+  position: relative;
+  z-index: 1000;
+  background: var(--cream);
+}
+
+.nav-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.menu-item {
+  flex: 1;
+}
+
+.menu-left {
+  margin-left: 4em;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.menu-center {
+  text-align: center;
+}
+
+.brand-logo {
+  font-size: clamp(14px, 1.3vw, 18px);
+  letter-spacing: 0.1em;
+  font-weight: bold;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.menu-right {
+  margin-right: 4em;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 18px;
+}
+
+.menu-link {
+  padding: 0 20px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+
+.menu-link.nav-link {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+  color: #000;
+}
+
+.menu-link.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: -8px;
+  height: 2px;
+  background: var(--accent-blue);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.menu-link.nav-link:hover {
+  color: var(--accent-cyan);
+}
+
+.menu-link.nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+.mobile-only {
+  display: none;
+}
+
+.burger-icon {
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  background: none;
+  border: 0;
+}
+
+.burger-icon span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: #000;
+  border-radius: 999px;
+  transition: all 0.3s ease;
+}
+
+.burger-icon.active span:nth-child(1) {
+  transform: rotate(45deg) translate(4px, 4px);
+}
+
+.burger-icon.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.burger-icon.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(4px, -4px);
+}
+
+.mobile-menu {
+  position: fixed;
+  top: 70px;
+  right: 0;
+  width: 100%;
+  height: calc(100vh - 70px);
+  background: var(--cream);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.4s ease;
+  z-index: 999;
+}
+
+.mobile-menu.show {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-menu a {
+  font-family: "Monument Extended", sans-serif;
+  font-size: 18px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #000;
+}
+
+/* ===== SHARED ===== */
+section {
+  padding: var(--gap) clamp(24px, 6vw, 100px);
+}
+
+.section-label {
+  font-family: "Monument Extended", sans-serif;
+  font-size: clamp(9px, 1vw, 11px);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--stroke);
+  margin-bottom: 1.6em;
+}
+
+/* ===== ARTICLE HEADER ===== */
+.article-header {
+  padding: calc(var(--gap) * 0.8) clamp(24px, 6vw, 100px) 0;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.breadcrumb {
+  font-family: "Monument Extended", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--stroke);
+  margin-bottom: 2.2em;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.breadcrumb a {
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  color: var(--ink);
+}
+
+.article-title {
+  font-family: "Monument Extended", sans-serif;
+  font-size: clamp(28px, 4.4vw, 60px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--ink);
+  overflow-wrap: break-word;
+}
+
+.article-title em {
+  font-style: normal;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--ink);
+}
+
+.article-dek {
+  margin-top: 1.2em;
+  max-width: 720px;
+  font-size: clamp(17px, 1.5vw, 20px);
+  line-height: 1.65;
+  opacity: 0.8;
+}
+
+.article-meta {
+  margin-top: 1.6em;
+  padding-bottom: 2.2em;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--stroke);
+}
+
+.featured-image-box {
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  overflow: hidden;
+  background: var(--sand);
+  border: 1px solid rgba(117, 113, 113, 0.3);
+}
+
+/* ===== ARTICLE BODY ===== */
+.article-body {
+  padding: calc(var(--gap) * 0.6) clamp(24px, 6vw, 100px) var(--gap);
+}
+
+.article-body-inner {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.article-body-inner h2 {
+  font-family: "Monument Extended", sans-serif;
+  font-size: clamp(20px, 2.4vw, 30px);
+  text-transform: uppercase;
+  line-height: 1.2;
+  margin: 2em 0 0.8em;
+}
+
+.article-body-inner h3 {
+  font-family: "Monument Extended", sans-serif;
+  font-size: clamp(14px, 1.4vw, 17px);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 1.8em 0 0.6em;
+}
+
+.article-body-inner p,
+.article-body-inner li {
+  font-size: 17px;
+  line-height: 1.85;
+  opacity: 0.88;
+}
+
+.article-body-inner p {
+  margin-bottom: 1.3em;
+}
+
+.article-body-inner ul,
+.article-body-inner ol {
+  margin: 0 0 1.5em 1.3em;
+}
+
+.article-body-inner li {
+  margin-bottom: 0.5em;
+}
+
+.article-body-inner a:not(.btn-book) {
+  color: var(--ink);
+  text-decoration-color: var(--accent-blue);
+  text-underline-offset: 3px;
+}
+
+.article-body-inner blockquote {
+  border-left: 2px solid var(--accent-blue);
+  padding-left: 1.2em;
+  margin: 1.8em 0;
+  font-style: italic;
+}
+
+.article-body-inner img {
+  height: auto;
+  margin: 1.6em 0;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  margin: 1.6em 0 2.2em;
+}
+
+.table-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.table-wrap th,
+.table-wrap td {
+  border-bottom: 1px solid rgba(117, 113, 113, 0.3);
+  padding: 12px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.table-wrap th {
+  font-family: "Monument Extended", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--stroke);
+}
+
+.post-callout {
+  background: var(--white);
+  border-left: 3px solid var(--accent-cyan);
+  padding: 1.2em 1.4em;
+  margin: 1.8em 0;
+}
+
+.post-callout p:last-child {
+  margin-bottom: 0;
+}
+
+/* <BookCta /> inline MDX component */
+.post-cta {
+  border-top: 1px solid rgba(117, 113, 113, 0.3);
+  border-bottom: 1px solid rgba(117, 113, 113, 0.3);
+  padding: 2em 0;
+  margin: 2.6em 0;
+}
+
+.post-cta .section-label {
+  margin-bottom: 0.8em;
+}
+
+.post-cta-title {
+  font-family: "Monument Extended", sans-serif;
+  font-size: clamp(18px, 2vw, 24px);
+  text-transform: uppercase;
+  line-height: 1.2;
+  margin-bottom: 1em !important;
+  opacity: 1 !important;
+}
+
+.post-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 24px;
+}
+
+.post-cta-call {
+  font-family: "Monument Extended", sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ===== BLOG INDEX ===== */
+.post-list-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-top: calc(var(--gap) * 0.4);
+}
+
+.post-list {
+  list-style: none;
+  border-top: 1px solid rgba(117, 113, 113, 0.35);
+}
+
+.post-card {
+  border-bottom: 1px solid rgba(117, 113, 113, 0.35);
+}
+
+.post-card a {
+  display: block;
+  padding: 2em 0;
+  text-decoration: none;
+}
+
+.post-card time {
+  font-family: "Monument Extended", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--stroke);
+}
+
+.post-card h2 {
+  font-family: "Monument Extended", sans-serif;
+  font-size: clamp(18px, 2.2vw, 28px);
+  text-transform: uppercase;
+  line-height: 1.2;
+  margin: 0.6em 0 0.5em;
+}
+
+.post-card p {
+  max-width: 720px;
+  font-size: 16px;
+  line-height: 1.7;
+  opacity: 0.8;
+}
+
+.post-card-more {
+  display: inline-block;
+  margin-top: 1em;
+  font-family: "Monument Extended", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.post-card a:hover h2 {
+  color: var(--accent-cyan);
+}
+
+/* ===== BOOK CTA ===== */
+.book-cta {
+  background: var(--sand);
+  text-align: center;
+}
+
+.cta-inner {
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.cta-headline {
+  font-family: "Monument Extended", sans-serif;
+  font-size: clamp(28px, 4vw, 54px);
+  text-transform: uppercase;
+  line-height: 1.05;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--ink);
+  margin-bottom: 0.6em;
+}
+
+.cta-headline em {
+  font-style: normal;
+  color: var(--ink);
+  -webkit-text-stroke: 0;
+}
+
+.cta-inner p {
+  font-size: 16px;
+  line-height: 1.7;
+  opacity: 0.8;
+  margin-bottom: 1.8em;
+}
+
+.btn-book {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: "Monument Extended", sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--white);
+  background: var(--ink);
+  border: none;
+  padding: 18px 36px;
+  text-decoration: none;
+}
+
+.book-meta {
+  margin-top: 1.4em;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  opacity: 0.7;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  background: var(--ink);
+  color: rgba(245, 245, 242, 0.6);
+  padding: clamp(40px, 5vw, 80px) clamp(24px, 6vw, 100px);
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 3em;
+  align-items: start;
+}
+
+.footer-brand {
+  font-family: "Monument Extended", sans-serif;
+  font-size: clamp(20px, 2.5vw, 36px);
+  color: var(--white);
+  text-transform: uppercase;
+  margin-bottom: 0.6em;
+}
+
+.footer-tagline {
+  font-style: italic;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.footer-col-title {
+  font-family: "Monument Extended", sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(245, 245, 242, 0.4);
+  margin-bottom: 1.4em;
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8em;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.footer-links a {
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: var(--white);
+}
+
+.footer-bottom {
+  grid-column: 1 / -1;
+  border-top: 1px solid rgba(245, 245, 242, 0.1);
+  padding-top: 2em;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(245, 245, 242, 0.35);
+}
+
+.footer-credit a {
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  nav.menu {
+    height: 70px;
+  }
+
+  .menu-left {
+    margin-left: 1.2em;
+  }
+
+  .menu-right {
+    margin-right: 1.2em;
+  }
+
+  /* !important: .menu-link.nav-link sets display and would otherwise win on specificity */
+  .desktop-only {
+    display: none !important;
+  }
+
+  .mobile-only {
+    display: flex;
+  }
+
+  .brand-logo {
+    font-size: 13px;
+  }
+
+  .nav-logo {
+    width: 44px;
+    height: 44px;
+  }
+
+  .featured-image-box {
+    aspect-ratio: 4 / 3;
+  }
+
+  footer {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: 0.6em;
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "pearl-roots-dental-clinic",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-blog.mjs",
+    "build:drafts": "node scripts/build-blog.mjs --drafts",
+    "preview": "node scripts/serve.mjs"
+  },
+  "devDependencies": {
+    "@mdx-js/mdx": "^3.1.1",
+    "gray-matter": "^4.0.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remark-gfm": "^4.0.1"
+  }
+}

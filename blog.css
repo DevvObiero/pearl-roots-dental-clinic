@@ -482,6 +482,28 @@ section {
   color: var(--accent-cyan);
 }
 
+/* ===== SERVICE PAGES ===== */
+.article-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 28px;
+  margin-bottom: calc(var(--gap) * 0.5);
+}
+
+.related-wrap {
+  max-width: 920px;
+  margin: 0 auto;
+  padding-top: 0;
+}
+
+.post-card-num {
+  font-family: "Monument Extended", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--stroke);
+}
+
 /* ===== BOOK CTA ===== */
 .book-cta {
   background: var(--sand);

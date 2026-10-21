@@ -141,6 +141,7 @@
 
     <div class="mobile-menu">
       <a href="#about">About</a>
+      <a href="services/">Services</a>
       <a href="blog/">Blog</a>
       <a href="tel:+254748704333">Call +254 748 704 333</a>
     </div>
@@ -165,13 +166,14 @@
     <div class="hero-container">
       <div class="sidebar-text">254</div>
     </div>
-    <!-- Trust stats: visible from first paint (not part of the delayed intro animation)
-         and rendered as final values so they never flash "0+" above the fold -->
+    <!-- Trust stats: not part of the delayed intro animation. Final values are in the HTML (for crawlers
+         and no-JS visitors); script.js fades them in and counts up once they scroll into view. -->
     <div class="hero-trust">
+      <p class="hero-tagline">Premium dental care at an affordable price</p>
       <ul class="hero-stats" aria-label="Pearl Roots at a glance">
-        <li><strong>5+</strong><span>Years of Practice</span></li>
-        <li><strong>5000+</strong><span>Smiles Transformed</span></li>
-        <li><strong>98%</strong><span>Patient Satisfaction</span></li>
+        <li><strong data-count="5" data-suffix="+">5+</strong><span>Years of Practice</span></li>
+        <li><strong data-count="5000" data-suffix="+">5000+</strong><span>Smiles Transformed</span></li>
+        <li><strong data-count="98" data-suffix="%">98%</strong><span>Patient Satisfaction</span></li>
       </ul>
       <a href="tel:+254748704333" class="hero-call"><span class="hero-call-prefix">Free consultation · </span>Call +254 748 704 333</a>
     </div>
@@ -196,11 +198,17 @@
       <div class="reveal" style="transition-delay:0.15s">
         <div class="about-body">
           <p>There's a version of you that smiles without thinking twice. That laughs freely, speaks boldly, shows up
-            fully. At Pearl Roots, that's who we're working towards.
-            We're a dental practice based in Ngong, Nairobi, built around one idea: that the right care, done well,
-            changes how you move through the world. Not just your teeth, you.</p>
-
+            fully. At Pearl Roots, that's who we're working towards.</p>
+          <p>We're a dental practice in Ngong, Nairobi, built on one belief: premium dental care shouldn't come with a
+            premium price tag. You get uncompromising clinical standards in a calm, clean clinic, every option
+            explained clearly, and your costs discussed upfront at a free consultation, so there are no surprises.
+            Not just your teeth, you.</p>
         </div>
+        <ul class="about-values">
+          <li><strong>Premium care</strong><span>Careful, detailed dentistry with no shortcuts on quality.</span></li>
+          <li><strong>Affordable pricing</strong><span>Fair prices, explained before treatment starts. No hidden fees.</span></li>
+          <li><strong>Free consultation</strong><span>Get a clear plan and quote first. No pressure, no obligation.</span></li>
+        </ul>
       </div>
     </section>
 
@@ -213,65 +221,75 @@
           <p class="section-label">002 - Services</p>
           <h2 class="services-title">What We<br>Offer</h2>
         </div>
-        <p class="services-note">A full range of dental care, from prevention to smile design.</p>
+        <p class="services-note">Premium care across every treatment, from prevention to smile design, at prices that
+          make sense. Tap a service to learn more.</p>
       </div>
 
+      <!-- Each card links to its service page (generated from content/services/*.mdx by `npm run build`) -->
       <div class="services-grid">
-        <div class="service-card reveal">
+        <a class="service-card reveal" href="services/cosmetic-dentistry/">
           <div class="service-number">01</div>
-          <div class="service-name">Cosmetic Dentistry</div>
-          <p class="service-desc">Composite bonding and masking, veneers, crowns, and silver or gold crowns for patients
-            looking to improve the look and finish of their smile.</p>
-        </div>
+          <h3 class="service-name">Cosmetic Dentistry</h3>
+          <p class="service-desc">Composite bonding and masking, veneers, crowns, and silver or gold crowns: a premium
+            smile finish without the premium price tag.</p>
+          <span class="service-arrow" aria-hidden="true">→</span>
+        </a>
 
-        <div class="service-card reveal" style="transition-delay:0.1s">
+        <a class="service-card reveal" style="transition-delay:0.1s" href="teeth-whitening.html">
           <div class="service-number">02</div>
-          <div class="service-name">Teeth Whitening</div>
-          <p class="service-desc">Professional whitening options, including in-clinic treatment and home whitening kits
+          <h3 class="service-name">Teeth Whitening</h3>
+          <p class="service-desc">In-clinic laser whitening from KSh 25,000 and custom take-home kits from KSh 15,000,
             for brighter, more even results.</p>
-        </div>
+          <span class="service-arrow" aria-hidden="true">→</span>
+        </a>
 
-        <div class="service-card reveal" style="transition-delay:0.2s">
+        <a class="service-card reveal" style="transition-delay:0.2s" href="services/orthodontics/">
           <div class="service-number">03</div>
-          <div class="service-name">Orthodontics</div>
-          <p class="service-desc">Braces, orthodontic fixed and removable appliances, and retainers, both fixed and
-            removable, to support alignment and long-term stability.</p>
-        </div>
+          <h3 class="service-name">Orthodontics</h3>
+          <p class="service-desc">Braces, fixed and removable appliances, and retainers for lasting alignment, with
+            costs explained clearly before you begin.</p>
+          <span class="service-arrow" aria-hidden="true">→</span>
+        </a>
 
-        <div class="service-card reveal" style="transition-delay:0.05s">
+        <a class="service-card reveal" style="transition-delay:0.05s" href="services/restorative-care/">
           <div class="service-number">04</div>
-          <div class="service-name">Restorative Care</div>
-          <p class="service-desc">Tooth-coloured fillings, crowns, crowns and bridges, and partial or complete dentures
-            to restore comfort, function, and appearance.</p>
-        </div>
+          <h3 class="service-name">Restorative Care</h3>
+          <p class="service-desc">Tooth-coloured fillings, crowns and bridges, and partial or complete dentures:
+            long-lasting, cost-effective repairs that restore comfort and confidence.</p>
+          <span class="service-arrow" aria-hidden="true">→</span>
+        </a>
 
-        <div class="service-card reveal" style="transition-delay:0.15s">
+        <a class="service-card reveal" style="transition-delay:0.15s" href="services/preventive-dentistry/">
           <div class="service-number">05</div>
-          <div class="service-name">Preventive Health</div>
-          <p class="service-desc">Routine cleanings, screenings, splinting, mouth guards, fluoride therapy, and pits and
-            fissure sealants to help protect your smile early.</p>
-        </div>
+          <h3 class="service-name">Preventive Health</h3>
+          <p class="service-desc">Cleanings, screenings, splinting, mouth guards, fluoride therapy and fissure sealants,
+            the most affordable way to protect your smile.</p>
+          <span class="service-arrow" aria-hidden="true">→</span>
+        </a>
 
-        <div class="service-card reveal" style="transition-delay:0.25s">
+        <a class="service-card reveal" style="transition-delay:0.25s" href="services/dental-implants/">
           <div class="service-number">06</div>
-          <div class="service-name">Dental Implants</div>
-          <p class="service-desc">Long-term tooth replacement focused on comfort, function, and confidence, with
-            treatment planned around your needs.</p>
-        </div>
+          <h3 class="service-name">Dental Implants</h3>
+          <p class="service-desc">Premium, long-term tooth replacement focused on comfort, function and confidence,
+            planned around your needs and budget.</p>
+          <span class="service-arrow" aria-hidden="true">→</span>
+        </a>
 
-        <div class="service-card reveal">
+        <a class="service-card reveal" href="services/tooth-extraction/">
           <div class="service-number">07</div>
-          <div class="service-name">Extractions</div>
-          <p class="service-desc">Adult and children's extractions done with care, clarity, and close attention to
-            comfort before, during, and after treatment.</p>
-        </div>
+          <h3 class="service-name">Extractions</h3>
+          <p class="service-desc">Gentle adult and children's extractions, with close attention to comfort before,
+            during and after treatment.</p>
+          <span class="service-arrow" aria-hidden="true">→</span>
+        </a>
 
-        <div class="service-card reveal" style="transition-delay:0.1s">
+        <a class="service-card reveal" style="transition-delay:0.1s" href="services/pediatric-dentistry/">
           <div class="service-number">08</div>
-          <div class="service-name">Pediatric Dentistry</div>
-          <p class="service-desc">Gentle dental care for children, with a focus on prevention, comfort, and building
-            positive habits early.</p>
-        </div>
+          <h3 class="service-name">Pediatric Dentistry</h3>
+          <p class="service-desc">Gentle, affordable dental care for children, focused on prevention, comfort and
+            building positive habits early.</p>
+          <span class="service-arrow" aria-hidden="true">→</span>
+        </a>
       </div>
     </section>
 
@@ -289,8 +307,8 @@
       </div>
 
       <div class="book-right reveal" style="transition-delay:0.15s">
-        <p>Every smile is different. Book a free consultation and we'll help you figure out the right treatment — no
-          pressure, no obligation.</p>
+        <p>Worried about the cost? Book a free consultation and we'll explain your options and what each one costs
+          before anything begins. No pressure, no obligation.</p>
         <button class="btn-book"
           onclick="window.open('https://wa.me/254748704333?text=Hi%20Pearl%20Roots%2C%20I%E2%80%99m%20interested%20in%20a%20free%20consultation.%20Please%20share%20available%20slots.%20Thanks!', '_blank', 'noopener')">
           Chat on WhatsApp

@@ -1,14 +1,17 @@
-// Static blog generator for pearlrootsdentalclinic.com
+// Static blog + service page generator for pearlrootsdentalclinic.com
 //
-//   npm run build          -> builds published posts
+//   npm run build          -> builds published posts and service pages
 //   npm run build:drafts   -> also builds posts marked `draft: true` (for local preview only)
+//   npm run check          -> compiles + validates all content, writes nothing
 //
-// Reads content/blog/*.mdx|*.md, writes:
-//   blog/index.html          (blog index)
-//   blog/<slug>/index.html   (one page per post -> clean /blog/<slug>/ URLs)
-//   sitemap.xml              (regenerated: static pages + blog)
+// Reads content/blog/*.mdx|*.md and content/services/*.mdx|*.md, writes:
+//   blog/index.html              (blog index)
+//   blog/<slug>/index.html       (one page per post -> clean /blog/<slug>/ URLs)
+//   services/index.html          (services index)
+//   services/<slug>/index.html   (one page per service)
+//   sitemap.xml                  (regenerated: static pages + blog + services)
 //
-// The blog/ directory is fully generated and wiped on every build. Do not hand-edit it.
+// The blog/ and services/ directories are fully generated and wiped on every build. Do not hand-edit them.
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -21,14 +24,17 @@ import { createElement as h } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const CONTENT_DIR = path.join(ROOT, 'content', 'blog');
-const OUT_DIR = path.join(ROOT, 'blog');
+const COLLECTIONS = {
+  blog: { contentDir: path.join(ROOT, 'content', 'blog'), outDir: path.join(ROOT, 'blog'), required: ['title', 'date', 'description'] },
+  services: { contentDir: path.join(ROOT, 'content', 'services'), outDir: path.join(ROOT, 'services'), required: ['title', 'name', 'order', 'description'] },
+};
 const SITE = 'https://pearlrootsdentalclinic.com';
 const PHONE = '+254748704333';
 const PHONE_DISPLAY = '+254 748 704 333';
 const WA = 'https://wa.me/254748704333';
 const DEFAULT_IMAGE = '/images/preview.jpeg';
 const INCLUDE_DRAFTS = process.argv.includes('--drafts');
+const CHECK_ONLY = process.argv.includes('--check');
 
 // Hand-built pages that live outside content/blog but should appear on the blog index.
 const LEGACY_POSTS = [
@@ -45,6 +51,17 @@ const LEGACY_POSTS = [
 const STATIC_PAGES = [
   { loc: '/', lastmod: '2026-10-21', priority: '1.00' },
   { loc: '/teeth-whitening.html', lastmod: '2026-10-21', priority: '0.80' },
+];
+
+// Teeth whitening already has a full hand-built page, so the services index links there
+// instead of generating a duplicate /services/teeth-whitening/ page.
+const LEGACY_SERVICES = [
+  {
+    name: 'Teeth Whitening',
+    order: 2,
+    description: 'Professional in-clinic laser whitening and custom take-home kits, with upfront pricing.',
+    url: '/teeth-whitening.html',
+  },
 ];
 
 /* ---------- helpers ---------- */
@@ -153,7 +170,7 @@ ${head}
   <nav class="menu">
     <div class="menu-left menu-item">
       <a href="/"><img src="/images/logo.png" alt="Pearl Roots Dental Clinic logo" class="nav-logo" /></a>
-      <a href="/#services" class="menu-link nav-link desktop-only">services</a>
+      <a href="/services/" class="menu-link nav-link desktop-only">services</a>
       <a href="/blog/" class="menu-link nav-link desktop-only">blog</a>
     </div>
     <div class="menu-center menu-item">
@@ -169,7 +186,7 @@ ${head}
 
   <div class="mobile-menu">
     <a href="/">Home</a>
-    <a href="/#services">Services</a>
+    <a href="/services/">Services</a>
     <a href="/blog/">Blog</a>
     <a href="tel:${PHONE}">Call ${PHONE_DISPLAY}</a>
   </div>
@@ -233,57 +250,96 @@ ${body}
 
 /* ---------- build ---------- */
 
-async function loadPosts() {
+async function loadCollection(kind) {
+  const { contentDir, required } = COLLECTIONS[kind];
   let files = [];
   try {
-    files = (await fs.readdir(CONTENT_DIR)).filter((f) => /\.mdx?$/.test(f) && !f.startsWith('_'));
+    files = (await fs.readdir(contentDir)).filter((f) => /\.mdx?$/.test(f) && !f.startsWith('_'));
   } catch {
-    console.warn(`No ${path.relative(ROOT, CONTENT_DIR)} directory found; building an empty blog.`);
+    console.warn(`No ${path.relative(ROOT, contentDir)} directory found; building an empty ${kind} section.`);
   }
 
   const posts = [];
+  const errors = [];
   for (const file of files) {
-    const source = await fs.readFile(path.join(CONTENT_DIR, file), 'utf8');
-    const { data, content } = matter(source);
+    const label = `${kind}/${file}`;
+    try {
+      const source = await fs.readFile(path.join(contentDir, file), 'utf8');
+      const { data, content } = matter(source);
 
-    for (const field of ['title', 'date', 'description']) {
-      if (!data[field]) throw new Error(`${file}: missing required frontmatter field "${field}"`);
+      for (const field of required) {
+        if (data[field] === undefined || data[field] === '') throw new Error(`missing required frontmatter field "${field}"`);
+      }
+      if (data.draft && !INCLUDE_DRAFTS) {
+        console.log(`  skip (draft) ${label}`);
+        continue;
+      }
+
+      const slug = slugify(data.slug || file.replace(/\.mdx?$/, ''));
+      const { default: Content } = await evaluate(content, {
+        ...runtime,
+        format: file.endsWith('.md') ? 'md' : 'mdx',
+        remarkPlugins: [remarkGfm],
+        baseUrl: pathToFileURL(path.join(contentDir, file)).href,
+      });
+
+      const words = content.split(/\s+/).filter(Boolean).length;
+      posts.push({
+        file: label,
+        slug,
+        url: `/${kind}/${slug}/`,
+        title: String(data.title),
+        name: data.name ? String(data.name) : null,
+        order: Number(data.order) || 0,
+        description: String(data.description),
+        date: data.date ? toIsoDate(data.date, 'date', file) : null,
+        updated: data.updated ? toIsoDate(data.updated, 'updated', file) : null,
+        image: data.image || null,
+        imageAlt: data.imageAlt || String(data.title),
+        seoTitle: data.seoTitle ? String(data.seoTitle) : null,
+        waMessage: data.whatsappMessage ? String(data.whatsappMessage) : null,
+        words,
+        readingMinutes: Math.max(1, Math.round(words / 200)),
+        html: renderToStaticMarkup(h(Content, { components: mdxComponents })),
+      });
+    } catch (err) {
+      // Collect every broken file instead of stopping at the first one
+      errors.push(`${label}: ${err.message || err}`);
     }
-    if (data.draft && !INCLUDE_DRAFTS) {
-      console.log(`  skip (draft) ${file}`);
-      continue;
-    }
-
-    const slug = slugify(data.slug || file.replace(/\.mdx?$/, ''));
-    const { default: Content } = await evaluate(content, {
-      ...runtime,
-      format: file.endsWith('.md') ? 'md' : 'mdx',
-      remarkPlugins: [remarkGfm],
-      baseUrl: pathToFileURL(path.join(CONTENT_DIR, file)).href,
-    });
-
-    const words = content.split(/\s+/).filter(Boolean).length;
-    posts.push({
-      file,
-      slug,
-      url: `/blog/${slug}/`,
-      title: String(data.title),
-      description: String(data.description),
-      date: toIsoDate(data.date, 'date', file),
-      updated: data.updated ? toIsoDate(data.updated, 'updated', file) : null,
-      image: data.image || null,
-      imageAlt: data.imageAlt || String(data.title),
-      seoTitle: data.seoTitle ? String(data.seoTitle) : null,
-      waMessage: data.whatsappMessage ? String(data.whatsappMessage) : null,
-      readingMinutes: Math.max(1, Math.round(words / 200)),
-      html: renderToStaticMarkup(h(Content, { components: mdxComponents })),
-    });
   }
 
   const dupes = posts.map((p) => p.slug).filter((s, i, a) => a.indexOf(s) !== i);
-  if (dupes.length) throw new Error(`Duplicate post slugs: ${[...new Set(dupes)].join(', ')}`);
+  if (dupes.length) errors.push(`${kind}: duplicate slugs: ${[...new Set(dupes)].join(', ')}`);
 
-  return posts.sort((a, b) => b.date.localeCompare(a.date));
+  return {
+    errors,
+    items:
+      kind === 'blog'
+        ? posts.sort((a, b) => b.date.localeCompare(a.date))
+        : posts.sort((a, b) => a.order - b.order),
+  };
+}
+
+// Every root-relative link in generated HTML must point at a page that will exist.
+async function findBrokenLinks(pages) {
+  const known = new Set(pages.map((p) => p.url));
+  const broken = [];
+  for (const page of pages) {
+    for (const [, href] of page.html.matchAll(/href="(\/[^"#?]*)/g)) {
+      if (known.has(href)) continue;
+      if (/^\/(blog|services)\//.test(href)) {
+        if (href !== '/blog/' && href !== '/services/') broken.push(`${page.file}: ${href}`);
+        continue;
+      }
+      const target = path.join(ROOT, href === '/' ? 'index.html' : href);
+      try {
+        await fs.access(target);
+      } catch {
+        broken.push(`${page.file}: ${href}`);
+      }
+    }
+  }
+  return broken;
 }
 
 function renderPost(post) {
@@ -421,11 +477,150 @@ ${cards || '        <li class="post-card">New articles coming soon.</li>'}
   });
 }
 
-function renderSitemap(posts) {
+// `related` = blog posts that link to this service page (internal links in both directions help SEO).
+function renderService(service, related) {
+  const canonical = `${SITE}${service.url}`;
+  const image = service.image || DEFAULT_IMAGE;
+  const number = String(service.order).padStart(3, '0');
+  const schema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'MedicalProcedure',
+        name: service.name,
+        description: service.description,
+        url: canonical,
+        image: absUrl(image),
+        provider: {
+          '@type': 'Dentist',
+          name: 'Pearl Roots Dental Clinic',
+          url: `${SITE}/`,
+          telephone: PHONE,
+          address: { '@type': 'PostalAddress', addressLocality: 'Ngong', addressCountry: 'KE' },
+        },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+          { '@type': 'ListItem', position: 2, name: 'Services', item: `${SITE}/services/` },
+          { '@type': 'ListItem', position: 3, name: service.name, item: canonical },
+        ],
+      },
+    ],
+  };
+
+  const relatedHtml = related.length
+    ? `
+    <section class="related-wrap">
+      <p class="section-label">Further Reading</p>
+      <ul class="post-list">
+${related
+  .map((p) => `        <li class="post-card"><a href="${esc(p.url)}"><h2>${esc(p.title)}</h2><p>${esc(p.description)}</p><span class="post-card-more">Read article →</span></a></li>`)
+  .join('\n')}
+      </ul>
+    </section>`
+    : '';
+
+  const body = `    <article>
+      <header class="article-header">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/">Home</a><span aria-hidden="true">/</span>
+          <a href="/services/">Services</a><span aria-hidden="true">/</span>
+          <span aria-current="page">${esc(service.name)}</span>
+        </nav>
+        <p class="section-label">${number} — Services</p>
+        <h1 class="article-title">${esc(service.title)}</h1>
+        <p class="article-dek">${esc(service.description)}</p>
+        <div class="article-meta">
+          <span>Free consultation</span>
+          <span>Mon – Fri · 8am – 6pm</span>
+          <span>Ngong, Nairobi</span>
+        </div>
+        <div class="article-actions">
+          <a class="btn-book" href="${esc(waLink(service.waMessage || `Hi Pearl Roots, I'd like to book a free consultation about ${service.name.toLowerCase()}. Thanks!`))}" target="_blank" rel="noopener noreferrer">Book Free Consultation</a>
+          <a class="post-cta-call" href="tel:${PHONE}">Call ${PHONE_DISPLAY}</a>
+        </div>
+        ${service.image ? `<div class="featured-image-box"><img src="${esc(service.image)}" alt="${esc(service.imageAlt)}" fetchpriority="high" /></div>` : ''}
+      </header>
+
+      <div class="article-body">
+        <div class="article-body-inner">
+${service.html}
+        </div>
+      </div>
+    </article>
+${relatedHtml}
+    <section class="book-cta">
+      <div class="cta-inner">
+        <p class="section-label">Free Consultation</p>
+        <h2 class="cta-headline">Premium Care, <em>Fair Prices</em></h2>
+        <p>Book a free, no-pressure consultation at our Ngong clinic. We'll examine your teeth and explain your options and costs before any treatment begins.</p>
+        <a class="btn-book" href="${esc(waLink(service.waMessage || `Hi Pearl Roots, I'd like to book a free consultation about ${service.name.toLowerCase()}. Thanks!`))}" target="_blank" rel="noopener noreferrer">Book on WhatsApp</a>
+        <div class="book-meta">Mon – Fri · 8am – 6pm · <a href="tel:${PHONE}">Call ${PHONE_DISPLAY}</a></div>
+      </div>
+    </section>`;
+
+  return layout({
+    title: service.seoTitle || `${service.name} in Ngong, Nairobi | Pearl Roots Dental`,
+    description: service.description,
+    canonical,
+    ogType: 'website',
+    image,
+    head: `  <script type="application/ld+json">\n${jsonLd(schema)}\n  </script>`,
+    body,
+    waMessage: service.waMessage,
+  });
+}
+
+function renderServicesIndex(services) {
+  const entries = [...services, ...LEGACY_SERVICES].sort((a, b) => a.order - b.order);
+  const cards = entries
+    .map(
+      (s) => `        <li class="post-card">
+          <a href="${esc(s.url)}">
+            <span class="post-card-num">${String(s.order).padStart(2, '0')}</span>
+            <h2>${esc(s.name)}</h2>
+            <p>${esc(s.description)}</p>
+            <span class="post-card-more">View treatment →</span>
+          </a>
+        </li>`
+    )
+    .join('\n');
+
+  const body = `    <header class="article-header">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a><span aria-hidden="true">/</span>
+        <span aria-current="page">Services</span>
+      </nav>
+      <h1 class="article-title">Our <em>Services</em></h1>
+      <p class="article-dek">Premium dental care at an affordable price, from routine check-ups to complete smile makeovers, at our clinic in Ngong, Nairobi.</p>
+    </header>
+
+    <section class="post-list-wrap">
+      <ul class="post-list">
+${cards}
+      </ul>
+    </section>`;
+
+  return layout({
+    title: 'Dental Services in Ngong, Nairobi | Pearl Roots Dental Clinic',
+    description:
+      'Affordable, premium dental care in Ngong: cosmetic dentistry, whitening, braces, implants, fillings, extractions and kids’ dentistry. Book a free consultation.',
+    canonical: `${SITE}/services/`,
+    ogType: 'website',
+    image: DEFAULT_IMAGE,
+    body,
+  });
+}
+
+function renderSitemap(posts, services) {
   const today = new Date().toISOString().slice(0, 10);
   const newest = posts[0]?.updated || posts[0]?.date || today;
   const urls = [
     ...STATIC_PAGES,
+    { loc: '/services/', lastmod: today, priority: '0.90' },
+    ...services.map((s) => ({ loc: s.url, lastmod: s.updated || today, priority: '0.80' })),
     { loc: '/blog/', lastmod: newest, priority: '0.70' },
     ...posts.map((p) => ({ loc: p.url, lastmod: p.updated || p.date, priority: '0.60' })),
   ];
@@ -439,22 +634,51 @@ ${urls
 `;
 }
 
+async function writePage(dir, html) {
+  await fs.mkdir(dir, { recursive: true });
+  await fs.writeFile(path.join(dir, 'index.html'), html);
+}
+
 async function main() {
-  const posts = await loadPosts();
+  const blog = await loadCollection('blog');
+  const services = await loadCollection('services');
+  const posts = blog.items;
+  const errors = [...blog.errors, ...services.errors];
+  errors.push(...(await findBrokenLinks([...posts, ...services.items])).map((l) => `broken link ${l}`));
 
-  await fs.rm(OUT_DIR, { recursive: true, force: true });
-  await fs.mkdir(OUT_DIR, { recursive: true });
-
-  for (const post of posts) {
-    const dir = path.join(OUT_DIR, post.slug);
-    await fs.mkdir(dir, { recursive: true });
-    await fs.writeFile(path.join(dir, 'index.html'), renderPost(post));
-    console.log(`  built /blog/${post.slug}/  (${post.file})`);
+  if (errors.length) {
+    console.error(`\n${errors.length} problem(s):\n  - ${errors.join('\n  - ')}`);
+    process.exit(1);
   }
 
-  await fs.writeFile(path.join(OUT_DIR, 'index.html'), renderIndex(posts));
-  await fs.writeFile(path.join(ROOT, 'sitemap.xml'), renderSitemap(posts));
-  console.log(`Done: ${posts.length} post(s), blog index, sitemap.xml${INCLUDE_DRAFTS ? ' (DRAFTS INCLUDED - do not deploy)' : ''}`);
+  if (CHECK_ONLY) {
+    for (const p of [...posts, ...services.items]) console.log(`  ok ${p.file}  (${p.words} words)`);
+    console.log(`Check passed: ${posts.length} post(s), ${services.items.length} service page(s). Nothing written.`);
+    return;
+  }
+
+  for (const { outDir } of Object.values(COLLECTIONS)) {
+    await fs.rm(outDir, { recursive: true, force: true });
+    await fs.mkdir(outDir, { recursive: true });
+  }
+
+  for (const post of posts) {
+    await writePage(path.join(COLLECTIONS.blog.outDir, post.slug), renderPost(post));
+    console.log(`  built ${post.url}  (${post.file})`);
+  }
+  for (const service of services.items) {
+    const related = posts.filter((p) => p.html.includes(`href="${service.url}"`)).slice(0, 4);
+    await writePage(path.join(COLLECTIONS.services.outDir, service.slug), renderService(service, related));
+    console.log(`  built ${service.url}  (${service.file}, ${related.length} related post(s))`);
+  }
+
+  await fs.writeFile(path.join(COLLECTIONS.blog.outDir, 'index.html'), renderIndex(posts));
+  await fs.writeFile(path.join(COLLECTIONS.services.outDir, 'index.html'), renderServicesIndex(services.items));
+  await fs.writeFile(path.join(ROOT, 'sitemap.xml'), renderSitemap(posts, services.items));
+  console.log(
+    `Done: ${posts.length} post(s), ${services.items.length} service page(s), indexes, sitemap.xml` +
+      (INCLUDE_DRAFTS ? ' (DRAFTS INCLUDED - do not deploy)' : '')
+  );
 }
 
 main().catch((err) => {

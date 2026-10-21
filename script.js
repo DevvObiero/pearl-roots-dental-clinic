@@ -223,3 +223,43 @@ faqItems.forEach((item) => {
     }
   });
 });
+/* STATS: fade in + count up when the stats strip scrolls into view.
+   The HTML holds the final values, so crawlers and no-JS visitors always see real numbers. */
+const statsList = document.querySelector('.hero-stats');
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if (statsList && 'IntersectionObserver' in window && !reduceMotion) {
+  const counters = statsList.querySelectorAll('[data-count]');
+
+  // Lock each number's width at its final size so the strip doesn't jiggle while counting
+  counters.forEach((el) => {
+    el.style.display = 'inline-block';
+    el.style.minWidth = el.getBoundingClientRect().width + 'px';
+  });
+  statsList.classList.add('stats-pending');
+
+  const countUp = (el) => {
+    const target = Number(el.dataset.count);
+    const suffix = el.dataset.suffix || '';
+    const duration = 1600;
+    const start = performance.now();
+
+    const tick = (now) => {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+      el.textContent = Math.round(target * eased) + suffix;
+      if (progress < 1) requestAnimationFrame(tick);
+    };
+    el.textContent = '0' + suffix;
+    requestAnimationFrame(tick);
+  };
+
+  const statsObserver = new IntersectionObserver((entries) => {
+    if (!entries.some((entry) => entry.isIntersecting)) return;
+    statsObserver.disconnect();
+    statsList.classList.remove('stats-pending');
+    counters.forEach(countUp);
+  }, { threshold: 0.5 });
+
+  statsObserver.observe(statsList);
+}

@@ -5,6 +5,7 @@
   "scripts": {
     "build": "node scripts/build-blog.mjs",
     "build:drafts": "node scripts/build-blog.mjs --drafts",
+    "check": "node scripts/build-blog.mjs --check",
     "preview": "node scripts/serve.mjs"
   },
   "devDependencies": {
